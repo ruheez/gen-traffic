@@ -1,0 +1,68 @@
+name: Tor VIP Clicker
+
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+
+jobs:
+  gen-traffic:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.8
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl wget tor unzip gnupg
+
+          # Install Chrome
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+          apt-get update
+          apt-get install -y google-chrome-stable
+
+          # Install ChromeDriver
+          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+          wget -q -N "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp/
+          unzip /tmp/chromedriver_linux64.zip -d /tmp/
+          mv /tmp/chromedriver /usr/local/bin/chromedriver
+          chmod +x /usr/local/bin/chromedriver
+
+          # Install Bower
+          npm install -g bower
+
+      - name: Set up Tor SOCKS proxy
+        run: tor &
+
+      - name: Run program
+        run: |
+          pip install selenium
+
+          # Your Python script here
+          python - <<'EOF'
+          import time
+          from selenium import webdriver
+
+          urls = [
+              "https://doruffleton.com/afu.php?zoneid=5995775&var=5995775&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996161&var=5996161&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996170&var=5996170&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996172&var=5996172&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996173&var=5996173&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996174&var=5996174&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0"
+          ]
+
+          options = webdriver.ChromeOptions()
+          options.add_argument("--headless")  # Add this line to use Headless mode
+          driver = webdriver.Chrome(options=options)
+          while True:
+              for url in urls:
+                  driver.get(url)
+                  time.sleep(1)
+              driver.quit()
+              time.sleep(5)
+          EOF
