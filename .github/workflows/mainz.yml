@@ -1,20 +1,15 @@
-name: gen-traffic 2
+name: gen-traffic
 
 on:
   schedule:
-    - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
-    
-    jobs:
+    - cron: "*/10 * * * *"
+
+jobs:
   gen-traffic:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Install Tor and Wget
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tor wget
 
       - name: Generate traffic
         env:
