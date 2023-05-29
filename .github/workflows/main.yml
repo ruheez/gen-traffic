@@ -3,7 +3,7 @@ name: gen-traffic
 on:
   schedule:
     - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
-
+ 
 jobs:
   gen-traffic:
     runs-on: ubuntu-latest
