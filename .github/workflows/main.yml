@@ -1,4 +1,4 @@
-name: Nomal-gen-traffic 
+name: Nomal
 
 on:
   schedule:
