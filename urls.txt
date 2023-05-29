@@ -3,6 +3,7 @@ https://$HOST/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3
 https://$HOST/afu.php?zoneid=5991782&var=5991782&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
 https://$HOST/afu.php?zoneid=5990968&var=5990968&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
 https://$HOST/afu.php?zoneid=5990971&var=5990971&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
+https://uptimerobot.com/?rid=e91a3124dee828
 https://$HOST/afu.php?zoneid=5990969&var=5990969&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
 https://$HOST/afu.php?zoneid=5991781&var=5991781&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
 https://$HOST/afu.php?zoneid=5991784&var=5991784&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
