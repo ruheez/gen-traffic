@@ -1,8 +1,8 @@
-name: gen-traffic
+name: Tor-gen-traffic
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/1 * * * *"
 
 jobs:
   gen-traffic:
