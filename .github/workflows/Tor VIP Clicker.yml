@@ -32,9 +32,12 @@ jobs:
           sudo npm install -g bower
 
       - name: Set up Tor SOCKS proxy
-        run: curl -sSLO https://raw.githubusercontent.com/dperson/torproxy/master/torproxy.sh
-        chmod +x torproxy.sh
-        ./torproxy.sh -l 9050 -i "0.0.0.0" &
+        run: |
+         curl -sSLO https://raw.githubusercontent.com/FDX100/Auto_Tor_IP_changer/master/install.py
+         chmod +x install.py
+         python3 install.py 
+         curl -sSLO https://raw.githubusercontent.com/FDX100/Auto_Tor_IP_changer/master/autoTOR.py
+         python3 autoTOR.py
 
       - name: Run program
         run: |
