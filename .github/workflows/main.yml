@@ -1,35 +1,66 @@
-name: VIP TOR AUTO 
+name: Tor VIP Clicker
 
 on:
   schedule:
-   - cron: "*/3 * * * *"
+    - cron: "*/1 * * * *"
 
 jobs:
   gen-traffic:
     runs-on: ubuntu-latest
+    container:
+      image: python:3.8
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Auto_Tor_IP_changer
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y tor
-          sudo pip3 install requests[socks]
-          git clone https://github.com/FDX100/Auto_Tor_IP_changer.git
-          cd Auto_Tor_IP_changer
-          python3 install.py
+          sudo apt-get install -y curl wget tor unzip gnupg
+          # Install Chrome
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # Install ChromeDriver
+          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+          wget -q -N "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp/
+          sudo unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          # Install Bower
+          sudo npm install -g bower
 
-      - name: Generate traffic
+      - name: Set up Tor SOCKS proxy
+        run: tor &
+
+      - name: Run program
         run: |
-          cd Auto_Tor_IP_changer
-          aut time # Change IP address
-          aut 10000 # Specify the number of times to change IP
+          pip install selenium
+          # Your Python script here
+          python - <<'EOF'
+          import time
+          from selenium import webdriver
 
-          while true; do
-            N=$(shuf -i 1-100 -n 1)
-            echo "Making ${N} random requests"
-            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl -A 'Mozilla/5.0 (Android 12; Mobile; LG-M255; rv:100.0) Gecko/100.0 Firefox/100.0Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.61 Mobile Safari/537.36' {} -o /dev/null; sleep 1;" || true &
-            sleep 5
-          done
+          urls = [
+              "https://doruffleton.com/afu.php?zoneid=5995775&var=5995775&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996161&var=5996161&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996170&var=5996170&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996172&var=5996172&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996173&var=5996173&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+              "https://doruffleton.com/afu.php?zoneid=5996174&var=5996174&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0"
+          ]
 
+          options = webdriver.ChromeOptions()
+          options.add_argument("--headless")  # Add this line to use Headless mode
+          options.add_argument("--no-sandbox")  # Add this line to fix the sandbox error
+          options.add_argument("--disable-dev-shm-usage")  # Add this line to fix the shm usage error
+
+          driver = webdriver.Chrome(options=options)
+          while True:
+              for url in urls:
+                  driver.get(url)
+                  time.sleep(1)
+              driver.quit()
+              time.sleep(5)
+          EOF
