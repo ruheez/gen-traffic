@@ -2,7 +2,7 @@ name: VIP TOR AUTO
 
 on:
   schedule:
-    - cron: "*/2 * * * *" # ทำงานทุก 2 นาที
+   - cron: "*/3 * * * *"
 
 jobs:
   gen-traffic:
