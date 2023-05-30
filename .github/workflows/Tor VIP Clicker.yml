@@ -32,7 +32,9 @@ jobs:
           sudo npm install -g bower
 
       - name: Set up Tor SOCKS proxy
-        run: tor &
+        run: curl -sSLO https://raw.githubusercontent.com/dperson/torproxy/master/torproxy.sh
+        chmod +x torproxy.sh
+        ./torproxy.sh -l 9050 -i "0.0.0.0" &
 
       - name: Run program
         run: |
