@@ -1,8 +1,0 @@
-- name: SSH Server
-  uses: mdelillo/ssh-server-action@v1.0.0
-
-steps:
-- uses: mdelillo/ssh-server-action@v1
-  with:
-    ngrok-authtoken: "2PW4zaWCmsiKxWc0Y8lIY6lmNTG_7FEUMfBacEAZXSMGEWaMm"
-    ssh-public-key: "ssh-rsa AAAAB3NzaC1yc2E..."
